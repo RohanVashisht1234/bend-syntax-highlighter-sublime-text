@@ -16,6 +16,7 @@ contexts:
     # Highlighting for functions:
     - match: \b[a-zA-Z]+\s*(?=\()
       scope: entity.name.function.bend
+    # For functions with no () that start with a def
     - match: (?<=\bdef\s)\w+
       scope: entity.name.function.bend
     - match: (?<=\bdata\s)\w+
