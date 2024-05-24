@@ -1,95 +1,80 @@
-$schema: https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json
-fileTypes:
-- bend
+%YAML 1.2
+---
 name: bend
-patterns:
-- include: '#comments'
-- include: '#operators'
-- include: '#strings'
-- include: '#numbers'
-- include: '#reserved-words'
-- include: '#operator-dedicated-keywords-statements'
-- include: '#ctrl-statements'
-- include: '#special-keywords'
-- include: '#true-false'
-- include: '#functions'
-- include: '#customs'
-repository:
-  comments:
-    patterns:
-    - begin: '#'
-      end: '
+file_extensions:
+  - bend
+scope: source.bend
 
-        '
-      name: comment.line.double-dash.bend
-    - begin: //
-      end: '
-
-        '
-      name: comment.line.double-dash.bend
-  customs:
-    patterns:
-    - match: (?<=\bdata\s)\w+
-      name: support.class.bend
-    - match: (?<=\blet\s)\w+
-      name: support.class.bend
-    - match: (?<=\bSome\s)\w+
-      name: support.class.bend
-    - match: (?<=\s*\.)\w+
-      name: support.variable.bend
-    - match: \w+(?=\s*=)
-      name: support.variable.bend
-    - match: (?<=\bbend\s)\w+
-      name: support.variable.bend
-    - match: (?<=\bdef\s)\w+
-      name: support.function.bend
-    - match: (?<=\bobject\s)\w+
-      name: support.other.bend
-    - match: (?<=\bfold\s)\w+
-      name: support.type.property-name.bend
-    - match: (?<=\bopen\s)\w+
-      name: support.class.bend
-    - match: (?<=\bdo\s)\w+
-      name: support.class.bend
-    - match: (?<=\bidentity\s)\w+
-      name: support.class.bend
-    - match: (?<=\blambda\s)\w+
-      name: support.class.bend
-  functions:
-    patterns:
-    - match: \b[a-zA-Z]+\s*\(
-      name: support.function.bend
-  numbers:
-    patterns:
-    - match: \b\d+\b
-      name: constant.numeric.bend
-    - match: \b\d+\.\d+\b
-      name: constant.numeric.bend
-    - match: \b\d{1,3}(?:_\d{3})*\b
-      name: constant.numeric.bend
-  operator-dedicated-keywords-statements:
-    patterns:
-    - match: \b(bend|None|Nil|Result|type)\b
-      name: keyword.bend
-  operators:
-    patterns:
-    - match: \b(\+|-|\*|/|!)\b
-      name: keyword.operator.new.bend
-  reserved-words:
-    patterns:
-    - match: \b(Node|Leaf|Tree)\b
-      name: support.type.bend
-  special-keywords:
-    patterns:
+contexts:
+  main:
+    # All the keywords
     - match: \b(def|switch|case|return|if|else|when|match|λ|Some|data|let|use|object|fold|open|do|bind|Name|identity|Bool|ask|with)\b
-      name: keyword.control.less.bend
-  strings:
-    patterns:
-    - begin: '"'
-      end: '"'
-      name: string.quoted.double.bend
-  true-false:
-    patterns:
-    - match: \b(True|False)\b
-      name: keyword.operator.new.bend
-scopeName: source.bend
+      scope: keyword.control.bend
+    # All the operator type of keywords
+    - match: \b(bend|None|Nil|Result|type)\b
+      scope: entity.name.bend
+    # Highlighting for functions:
+    - match: \b[a-zA-Z]+\s*(?=\()
+      scope: entity.name.function.bend
+    - match: (?<=\bdef\s)\w+
+      scope: entity.name.function.bend
+    - match: (?<=\bdata\s)\w+
+      scope: entity.name.constant.bend
+    - match: (?<=\blet\s)\w+
+      scope: entity.name.constant.bend
+    - match: (?<=\bSome\s)\w+
+      scope: entity.name.constant.bend
+    - match: (?<=\s*\.)\w+
+      name: entity.name.constant.bend
+    - match: \w+(?=\s*=)
+      name: entity.name.constant.bend
+    - match: (?<=\bbend\s)\w+
+      scope: entity.name.constant.bend
+    - match: (?<=\bobject\s)\w+
+      scope: entity.name.constant.bend
+    - match: (?<=\bfold\s)\w+
+      scope: entity.name.constant.bend
+    - match: (?<=\bopen\s)\w+
+      scope: entity.name.constant.bend
+    - match: (?<=\bdo\s)\w+
+      scope: entity.name.constant.bend
+    - match: (?<=\bidentity\s)\w+
+      scope: entity.name.constant.bend
+    - match: (?<=\blambda\s)\w+
+      scope: entity.name.constant.bend
+    - match: '"'
+      scope: punctuation.definition.string.begin.bend
+      push: double_quoted_string
+    - match: "'"
+      scope: punctuation.definition.string.begin.bend
+      push: single_quote_string
+    - match: '#'
+      scope: punctuation.definition.comment.bend
+      push: line_comment
+    - match: \b\d+\b
+      scope: constant.numeric.bend
+    - match: \b\d+\.\d+\b
+      scope: constant.numeric.bend
+    - match: \b\d{1,3}(?:_\d{3})*\b
+      scope: constant.numeric.bend
+    - match: \b(\+|-|\*|/|!)\b
+      scope: keyword.operator.bend
+
+  double_quoted_string:
+    - meta_scope: string.quoted.double.bend
+    - match: '\\.'
+      scope: constant.character.escape.bend
+    - match: '"'
+      scope: punctuation.definition.string.end.bend
+      pop: true
+  line_comment:
+    - meta_scope: comment.line.bend
+    - match: $
+      pop: true
+  single_quote_string:
+    - meta_scope: string.quoted.single.bend
+    - match: '\\.'
+      scope: constant.character.escape.bend
+    - match: "'"
+      scope: punctuation.definition.string.end.bend
+      pop: true
