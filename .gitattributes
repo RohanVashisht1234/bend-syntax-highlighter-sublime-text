@@ -1,0 +1,17 @@
+# Set default behavior to automatically normalize line endings.
+* text=auto
+# Exclude images
+*.jpg export-ignore
+*.jpeg export-ignore
+*.png export-ignore
+*.gif export-ignore
+*.bmp export-ignore
+*.svg export-ignore
+
+# Exclude test files
+*test* export-ignore
+*spec* export-ignore
+
+# Exclude Sublime Text project/workspace files
+*.sublime-project export-ignore
+*.sublime-workspace export-ignore
